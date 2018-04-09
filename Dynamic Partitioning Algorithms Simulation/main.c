@@ -37,8 +37,7 @@ int run(mem_strats_t strat){
 
 int main(int argc, char** argv)
 {  
-  float testq = ((float)299809/(float)300000);
-  printf("%f\n", testq);
+  printf("%d, %d, %d, %d", MIN_DURATION, MAX_DURATION, MIN_REQUEST_SIZE, MAX_REQUEST_SIZE);
   int memVal = atoi(argv[1]);
   int numTimes = atoi(argv[2]);
   int numRuns = atoi(argv[3]);
@@ -55,19 +54,21 @@ int main(int argc, char** argv)
   for(int i = 0; i < numRuns; i++){
     for(int k = 0; k < numTimes; k++){
       int res = run(strat);
+      //mem_print();
       if(res == -1){
         failTot++;
       }else{
         probeTot += (float)res;
       }
       mem_single_time_unit_transpired();
-      fragTot += (float)mem_fragment_count(1);    
+    //  fragTot += (float)mem_fragment_count(1);    
     }
+    fragTot += (float)mem_fragment_count(1); 
   }
 
-  float probeAvg = (probeTot / (numTimes * numRuns));
+  float probeAvg = (probeTot / ((numTimes * numRuns) - failTot));
   float failAvg = (failTot / (numTimes * numRuns));
-  float fragAvg = (fragTot / (numTimes * numRuns));
+  float fragAvg = (fragTot / (numRuns));
 
   printf("-------Results For First Fit Partitioning-------\n");
   printf("Average # of Probes : %f\n", probeAvg);
@@ -77,6 +78,7 @@ int main(int argc, char** argv)
 
   mem_clear();
 
+
   strat = NEXTFIT;
 
   probeTot = 0;
@@ -85,19 +87,22 @@ int main(int argc, char** argv)
   for(int i = 0; i < numRuns; i++){
     for(int k = 0; k < numTimes; k++){
       int res = run(strat);
+    //  mem_print();
       if(res == -1){
         failTot++;
       }else{
         probeTot += (float)res;
       }
       mem_single_time_unit_transpired();
-      fragTot += (float)mem_fragment_count(1);    
+      //fragTot += (float)mem_fragment_count(1);    
     }
+    fragTot += (float)mem_fragment_count(1);    
+
   }
 
-  probeAvg = (probeTot / (numTimes * numRuns));
+  probeAvg = (probeTot / ((numTimes * numRuns) - failTot));
   failAvg = (failTot / (numTimes * numRuns));
-  fragAvg = (fragTot / (numTimes * numRuns));
+  fragAvg = (fragTot / numRuns);
 
 
   printf("-------Results For Next Fit Partitioning-------\n");
@@ -117,20 +122,22 @@ int main(int argc, char** argv)
   for(int i = 0; i < numRuns; i++){
     for(int k = 0; k < numTimes; k++){
       int res = run(strat);
+      //mem_print();
       if(res == -1){
         failTot++;
       }else{
         probeTot += (float)res;
       }
       mem_single_time_unit_transpired();
-      fragTot += (float)mem_fragment_count(1);    
+     // fragTot += (float)mem_fragment_count(1);    
     }
+    fragTot += (float)mem_fragment_count(1);    
   }
 
 
-  probeAvg = (float)(probeTot / (numTimes * numRuns));
+  probeAvg = (probeTot / ((numTimes * numRuns) - failTot));
   failAvg = (float)(failTot / (numTimes * numRuns));
-  fragAvg = (float)(fragTot / (numTimes * numRuns));
+  fragAvg = (float)(fragTot / (numRuns));
 
 
   printf("-------Results For Best Fit Partitioning-------\n");
@@ -139,6 +146,8 @@ int main(int argc, char** argv)
   printf("Average # of Fragments: %f\n", fragAvg);
 
   printf("%f\n", probeTot);
+
+  mem_free();
 
 
 }

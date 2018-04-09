@@ -36,6 +36,7 @@ int is_enough_space(int size, int pos){
 }
 
 
+
 int getBlockSize(int pos){
 
   int count = 0;
@@ -126,9 +127,9 @@ int mem_allocate(mem_strats_t strategy, int size, dur_t duration)
     int fsize = 0;
     for(int i = 0; i < mem_size; i++){
       if(memory[i] == 0 && inBlock == 0){
+      	  numProbes++;
           if(is_enough_space(size, i) == 1){
             if(getBlockSize(i) < bestSize || bestSize == -1){
-              numProbes++;
               bestPos = i;
               bestSize = getBlockSize(i);
               inBlock = 1;
@@ -213,6 +214,7 @@ void mem_clear()
   for(int i = 0; i< mem_size; i++){
     memory[i] = 0;
   }
+  last_placement_position = 0;
 }
 
 /*
