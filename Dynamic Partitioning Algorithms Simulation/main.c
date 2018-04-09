@@ -37,7 +37,6 @@ int run(mem_strats_t strat){
 
 int main(int argc, char** argv)
 {  
-  printf("%d, %d, %d, %d", MIN_DURATION, MAX_DURATION, MIN_REQUEST_SIZE, MAX_REQUEST_SIZE);
   int memVal = atoi(argv[1]);
   int numTimes = atoi(argv[2]);
   int numRuns = atoi(argv[3]);
@@ -64,6 +63,8 @@ int main(int argc, char** argv)
     //  fragTot += (float)mem_fragment_count(1);    
     }
     fragTot += (float)mem_fragment_count(1); 
+    mem_clear();
+
   }
 
   float probeAvg = (probeTot / ((numTimes * numRuns) - failTot));
@@ -87,16 +88,16 @@ int main(int argc, char** argv)
   for(int i = 0; i < numRuns; i++){
     for(int k = 0; k < numTimes; k++){
       int res = run(strat);
-    //  mem_print();
       if(res == -1){
         failTot++;
       }else{
         probeTot += (float)res;
       }
       mem_single_time_unit_transpired();
-      //fragTot += (float)mem_fragment_count(1);    
     }
     fragTot += (float)mem_fragment_count(1);    
+    mem_clear();
+
 
   }
 
@@ -122,16 +123,16 @@ int main(int argc, char** argv)
   for(int i = 0; i < numRuns; i++){
     for(int k = 0; k < numTimes; k++){
       int res = run(strat);
-      //mem_print();
       if(res == -1){
         failTot++;
       }else{
         probeTot += (float)res;
       }
       mem_single_time_unit_transpired();
-     // fragTot += (float)mem_fragment_count(1);    
     }
-    fragTot += (float)mem_fragment_count(1);    
+    fragTot += (float)mem_fragment_count(1);
+    mem_clear();
+    
   }
 
 
@@ -144,8 +145,6 @@ int main(int argc, char** argv)
   printf("Average # of Probes : %f\n", probeAvg);
   printf("Average # of Failures: %f\n", failAvg);
   printf("Average # of Fragments: %f\n", fragAvg);
-
-  printf("%f\n", probeTot);
 
   mem_free();
 

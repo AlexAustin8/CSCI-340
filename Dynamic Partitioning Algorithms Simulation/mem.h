@@ -1,8 +1,8 @@
 /* minimum and maximum duration of use for an allocated block of memory */
 #define MIN_DURATION     13
 #define MAX_DURATION     27
-//#define MIN_DURATION     5
-//#define MAX_DURATION     9      /* must "fit" in a dur_t type (see below) */
+//#define MIN_DURATION     1
+//#define MAX_DURATION     8      /* must "fit" in a dur_t type (see below) */
 
 /* minimum and maximum allocation request size */
 #define MIN_REQUEST_SIZE    7

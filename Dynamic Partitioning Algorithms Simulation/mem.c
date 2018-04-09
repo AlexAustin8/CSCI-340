@@ -87,8 +87,8 @@ int mem_allocate(mem_strats_t strategy, int size, dur_t duration)
     for(int i = 0; i < mem_size; i=i+1){
       if(inBlock == 0 && memory[i] == 0){
        if(is_enough_space(size, i) == 1){
-          if(assign(size,duration,i) ==0){
-            return 2;
+          if(assign(size,duration,i) == 0){
+            return -1;
           }else{
             return numProbes;
           }
@@ -103,11 +103,12 @@ int mem_allocate(mem_strats_t strategy, int size, dur_t duration)
     }
 
   }else if(strategy == NEXTFIT){
-    for(int i = last_placement_position; i < (mem_size + last_placement_position); i++){
+  	int cycle = mem_size + last_placement_position;
+    for(int i = last_placement_position; i < cycle; i = i+1){
       if(inBlock == 0 && memory[i%mem_size] == 0){
        if(is_enough_space(size, (i%mem_size)) == 1){
-          if(assign(size,duration,(i%mem_size)) ==0){
-            return 2;
+          if(assign(size,duration,(i%mem_size)) == 0){
+            return -1;
           }else{
             return numProbes;
           }
@@ -119,7 +120,9 @@ int mem_allocate(mem_strats_t strategy, int size, dur_t duration)
       }else if(memory[i%mem_size] != 0){
         inBlock = 0;
       }
-
+      if (inBlock == 1 && i == (mem_size-1)){
+      	inBlock = 0;
+      }
     }
   }else if(strategy == BESTFIT){
     int bestSize = -1;
@@ -146,7 +149,6 @@ int mem_allocate(mem_strats_t strategy, int size, dur_t duration)
       return numProbes;
     }
   }
-  
   return -1;
 }
 
@@ -255,40 +257,25 @@ void mem_print()
 }
 
 /*int main(){
-  mem_strats_t first = BESTFIT;
+  mem_strats_t first = NEXTFIT;
   mem_init(30);
   memory[1] = 4;
   mem_allocate(first, 3, 5);
-  for(int i = 0; i<mem_size;i++){
-    printf("%d", memory[i]);
-  }
-  printf("\n");
+  mem_print();
   mem_allocate(first, 7,2);
-  for(int i = 0; i<mem_size;i++){
-    printf("%d", memory[i]);
-  }
-  printf("\n");
+  mem_print();
   memory[12] = 9;
   mem_allocate(first ,9,4);
-  for(int i = 0; i<mem_size;i++){
-    printf("%d", memory[i]);
-  }
-  printf("\n");
+  mem_print();
   mem_single_time_unit_transpired();
   
-  for(int i = 0; i<mem_size;i++){
-    printf("%d", memory[i]);
-  }
-  printf("\n");
+  mem_print();
 
   mem_single_time_unit_transpired();
 
  // mem_allocate(first, 5,9);
 
-  for(int i = 0; i<mem_size;i++){
-    printf("%d", memory[i]);
-  }
-  printf("\n");
+  mem_print();
 
   int k = mem_fragment_count(2);
   printf("%d\n",k);
@@ -298,19 +285,24 @@ void mem_print()
   printf("%d\n", p);
 
 
-  for(int i = 0; i<mem_size;i++){
-    printf("%d", memory[i]);
-  }
-  printf("\n");
+  mem_print();
 
   
-  mem_allocate(first, 4,8);
+  int wr = mem_allocate(first, 5,8);
 
-  for(int i = 0; i<mem_size;i++){
-    printf("%d", memory[i]);
-  }
+  printf("%d\n", wr);
+
+  mem_print();
   printf("\n");
-  
 
+  memory[1] = 0;
+  memory[2] = 0;
+  memory[3] = 0;
+  memory[4] = 0;
+  memory[5] = 0;
+   
+  mem_allocate(first, 6,4);
 
-} */
+  mem_print();
+
+} */ 
