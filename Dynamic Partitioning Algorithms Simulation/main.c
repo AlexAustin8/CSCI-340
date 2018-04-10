@@ -51,24 +51,28 @@ int main(int argc, char** argv)
   float failTot = 0; 
   float fragTot =0;
   for(int i = 0; i < numRuns; i++){
+    float failTemp = 0;
     for(int k = 0; k < numTimes; k++){
       int res = run(strat);
       //mem_print();
       if(res == -1){
-        failTot++;
+        failTemp++;
       }else{
         probeTot += (float)res;
       }
       mem_single_time_unit_transpired();
-    //  fragTot += (float)mem_fragment_count(1);    
+    //  fragTot += (float)mem_fragment_count(1);   
+   // failTot += failTemp; 
     }
+    failTot += failTemp; 
+
     fragTot += (float)mem_fragment_count(1); 
     mem_clear();
 
   }
 
   float probeAvg = (probeTot / ((numTimes * numRuns) - failTot));
-  float failAvg = (failTot / (numTimes * numRuns));
+  float failAvg = (failTot / (numRuns));
   float fragAvg = (fragTot / (numRuns));
 
   printf("-------Results For First Fit Partitioning-------\n");
@@ -86,15 +90,17 @@ int main(int argc, char** argv)
   failTot = 0; 
   fragTot =0;
   for(int i = 0; i < numRuns; i++){
+    float failTemp = 0;
     for(int k = 0; k < numTimes; k++){
       int res = run(strat);
       if(res == -1){
-        failTot++;
+        failTemp++;
       }else{
         probeTot += (float)res;
       }
       mem_single_time_unit_transpired();
     }
+    failTot += failTemp;
     fragTot += (float)mem_fragment_count(1);    
     mem_clear();
 
@@ -102,7 +108,7 @@ int main(int argc, char** argv)
   }
 
   probeAvg = (probeTot / ((numTimes * numRuns) - failTot));
-  failAvg = (failTot / (numTimes * numRuns));
+  failAvg = (failTot / (numRuns));
   fragAvg = (fragTot / numRuns);
 
 
@@ -121,15 +127,17 @@ int main(int argc, char** argv)
   failTot = 0; 
   fragTot =0;
   for(int i = 0; i < numRuns; i++){
+    float failTemp = 0;
     for(int k = 0; k < numTimes; k++){
       int res = run(strat);
       if(res == -1){
-        failTot++;
+        failTemp++;
       }else{
         probeTot += (float)res;
       }
       mem_single_time_unit_transpired();
     }
+    failTot += failTemp;
     fragTot += (float)mem_fragment_count(1);
     mem_clear();
     
@@ -137,7 +145,7 @@ int main(int argc, char** argv)
 
 
   probeAvg = (probeTot / ((numTimes * numRuns) - failTot));
-  failAvg = (float)(failTot / (numTimes * numRuns));
+  failAvg = (float)(failTot / (numTimes));
   fragAvg = (float)(fragTot / (numRuns));
 
 
